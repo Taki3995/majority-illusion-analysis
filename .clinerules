@@ -8,3 +8,10 @@
 - Do not apply GSD workflows unless the user explicitly asks for them.
 - When a GSD command triggers a deliverable (feature, fix, docs), offer the next
   step to the user using Cline's ask_user tool after completing it.
+
+# Reglas del Agente (Taller 2)
+
+- **Metodología:** Aplicar estrictamente el framework GSD (Spec -> Plan -> Execute -> Verify).
+- **Lectura de Archivos:** Para archivos de datos o código extensos, utilizar `read_file` con `start_line` y `end_line`. No leer archivos completos.
+- **Eficiencia:** Priorizar brevedad técnica y explicaciones concisas.
+- **Configuración de Red:** Al usar el Configuration Model de `networkx`, eliminar manualmente self-loops y aristas paralelas para asegurar un grafo simple como indica el paper.
