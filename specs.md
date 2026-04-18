@@ -1,22 +1,39 @@
-# Especificaciones Técnicas: Experimento 2b (Redes Sintéticas)
+# Especificaciones Técnicas: Replicación de "Majority Illusion" (Sintético)
 
-## Objetivo
+## 1. Generación de Redes
 
-Replicar la "Ilusión de la Mayoría" en redes sintéticas para observar cómo la estructura afecta la percepción local.
+- **Modelo:** Configuration Model para redes Scale-Free.
+- **Distribución de Grado:** p(k) ~ k^-alpha.
+- **Parámetros:** N = 10,000 nodos; alpha en {2.1, 2.4, 3.1}.
+- **Limpieza:** Eliminar self-loops y aristas paralelas tras la generación.
 
-## Parámetros de Red
+## 2. Configuración de Atributos (Nodos Activos)
 
-- **Tipo:** Redes de escala libre (Scale-free) generadas con el Configuration Model.
-- **Tamaño:** $N = 10,000$ nodos.
-- **Exponentes (α):** 2.1, 2.4 y 3.1.
-- **Nodos Activos:** Fracción fija $P(x=1) = 0.05$ (5%).
+- **Fracción Activa:** P(x=1) = 0.05 (5% de la red).
+- **Estado Inicial:** Asignar x=1 de forma aleatoria a 500 nodos.
+- **Correlación Grado-Atributo (rho_kx):** Se define según la Ec. 2 del paper:
+  rho*kx = [P(x=1) / (sigma_x * sigma_k)] \* [<k>*{x=1} - <k>]
+  _Donde <k>\_{x=1} es el grado promedio de los nodos activos._
 
-## Algoritmos Requeridos
+## 3. Algoritmos de Manipulación
 
-1. **Attribute Swapping:** Intercambiar estados (activo/inactivo) entre nodos para variar la correlación grado-atributo ($\rho_{kx}$) según la Ec. 2 del paper.
-2. **Edge Rewiring:** Ajustar la asortatividad de grado ($r_{kk}$) sin alterar la distribución de grados $p(k)$, siguiendo el procedimiento de Newman.
+### A. Attribute Swapping (Variar rho_kx)
 
-## Métrica de Éxito
+Para aumentar la correlación rho_kx:
 
-- Calcular $P_{>1/2}$: Fracción de nodos donde más del 50% de sus vecinos son activos ($\phi = 0.5$).
-- Generar gráficas de $P_{>1/2}$ vs. $\rho_{kx}$ para distintos valores de $r_{kk}$.
+1. Elegir un nodo v1 con x=1 y un nodo v0 con x=0.
+2. Intercambiar sus estados si k_v0 > k_v1.
+3. Repetir hasta alcanzar el valor deseado de rho_kx.
+
+### B. Edge Rewiring (Variar Asortatividad r_kk)
+
+Para cambiar la asortatividad sin alterar la distribución de grados p(k):
+
+1. Elegir dos aristas al azar, (u, v) y (w, z).
+2. Intercambiar los extremos para formar (u, w) y (v, z) si el cambio acerca el coeficiente de Pearson (r_kk) al objetivo.
+
+## 4. Medición de la Ilusión
+
+- **Cálculo de P\_>1/2:** Fracción de nodos donde más de la mitad de sus vecinos son activos (x=1).
+- **Gráfica Requerida:** Eje X: Correlación k-x (rho*kx); Eje Y: Fracción de mayoría (P*>1/2).
+- **Comparación:** Mostrar curvas para diferentes valores de asortatividad (r_kk) por cada alpha.
