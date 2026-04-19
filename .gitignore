@@ -1,7 +1,8 @@
 agents/
 get-shit-done/
 gsd-file-manifest.json
-
+.venv
+explicaciones/
 
 # !*
 
