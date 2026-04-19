@@ -1,39 +1,62 @@
-# Especificaciones Técnicas: Replicación de "Majority Illusion" (Sintético)
+# Especificaciones Técnicas: Replicación de "Majority Illusion"
 
-## 1. Generación de Redes
+## PARTE 1: Experimento Sintético (2b)
+
+### 1. Generación de Redes
 
 - **Modelo:** Configuration Model para redes Scale-Free.
 - **Distribución de Grado:** p(k) ~ k^-alpha.
 - **Parámetros:** N = 10,000 nodos; alpha en {2.1, 2.4, 3.1}.
 - **Limpieza:** Eliminar self-loops y aristas paralelas tras la generación.
 
-## 2. Configuración de Atributos (Nodos Activos)
+### 2. Configuración de Atributos (Nodos Activos)
 
 - **Fracción Activa:** P(x=1) = 0.05 (5% de la red).
 - **Estado Inicial:** Asignar x=1 de forma aleatoria a 500 nodos.
 - **Correlación Grado-Atributo (rho_kx):** Se define según la Ec. 2 del paper:
-  rho*kx = [P(x=1) / (sigma_x * sigma_k)] \* [<k>*{x=1} - <k>]
-  _Donde <k>\_{x=1} es el grado promedio de los nodos activos._
+  rho*kx = [P(x=1) / (sigma_x * sigma*k)] \* [<k>*{x=1} - <k>]
+  \_Donde <k>\_{x=1} es el grado promedio de los nodos activos.\*
 
-## 3. Algoritmos de Manipulación
+### 3. Algoritmos de Manipulación
 
-### A. Attribute Swapping (Variar rho_kx)
+#### A. Attribute Swapping (Variar rho_kx)
 
 Para aumentar la correlación rho_kx:
 
 1. Elegir un nodo v1 con x=1 y un nodo v0 con x=0.
 2. Intercambiar sus estados si k_v0 > k_v1.
-3. Repetir hasta alcanzar el valor deseado de rho_kx.
+3. Repetir hasta alcanzar el valor deseado de rho_kx. Utilizar actualización O(1) para eficiencia.
 
-### B. Edge Rewiring (Variar Asortatividad r_kk)
+#### B. Edge Rewiring (Variar Asortatividad r_kk)
 
 Para cambiar la asortatividad sin alterar la distribución de grados p(k):
 
 1. Elegir dos aristas al azar, (u, v) y (w, z).
-2. Intercambiar los extremos para formar (u, w) y (v, z) si el cambio acerca el coeficiente de Pearson (r_kk) al objetivo.
+2. Intercambiar los extremos para formar (u, w) y (v, z) si el cambio acerca el coeficiente de Pearson (r_kk) al objetivo. Utilizar actualización O(1) para eficiencia.
 
-## 4. Medición de la Ilusión
+### 4. Medición de la Ilusión
 
 - **Cálculo de P\_>1/2:** Fracción de nodos donde más de la mitad de sus vecinos son activos (x=1).
 - **Gráfica Requerida:** Eje X: Correlación k-x (rho*kx); Eje Y: Fracción de mayoría (P*>1/2).
-- **Comparación:** Mostrar curvas para diferentes valores de asortatividad (r_kk) por cada alpha.
+
+## PARTE 2: Experimento Redes Reales (2c)
+
+### 1. Datos
+
+- **Red 1 (Asortativa):** `data/ca-AstroPh.txt` (Ignorar líneas con '#').
+- **Red 2 (Desasortativa):** `data/git_edges.json` y `data/git_target.csv`.
+- **Limpieza:** Extraer la mayor componente conectada y asegurar que sean grafos simples no dirigidos.
+
+### 2. Configuración de Atributos
+
+- Evaluar con **dos** fracciones de nodos activos por red: $P(x=1) = 0.05$ (5%) y $P(x=1) = 0.20$ (20%).
+- Misma métrica de correlación $\rho_{kx}$ (Ec. 2).
+
+### 3. Manipulación (REGLA ESTRICTA)
+
+- **NO HACER EDGE REWIRING.** La topología y asortatividad de las redes reales es inmutable.
+- Aplicar **únicamente** el algoritmo _Attribute Swapping_ optimizado O(1) para variar la correlación grado-atributo.
+
+### 4. Medición
+
+- Gráfica requerida: Subplots de 1x2 (uno por red). Eje X: $\rho_{kx}$ (de 0.0 a 0.8), Eje Y: $P_{>1/2}$. Mostrar dos curvas (una para 5% y otra para 20%) en cada subgráfico para replicar la estructura de la Figura 4 del paper.
