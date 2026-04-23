@@ -1,17 +1,7 @@
-# GSD — Get Shit Done
-
-- GSD workflows live in `get-shit-done/workflows/`. Load the relevant workflow when
-  the user runs a `/gsd-*` command.
-- GSD agents live in `agents/`. Use the matching agent when spawning subagents.
-- GSD tools are at `get-shit-done/bin/gsd-tools.cjs`. Run with `node`.
-- Planning artifacts live in `.planning/`. Never edit them outside a GSD workflow.
-- Do not apply GSD workflows unless the user explicitly asks for them.
-- When a GSD command triggers a deliverable (feature, fix, docs), offer the next
-  step to the user using Cline's ask_user tool after completing it.
-
 # Reglas del Agente (Taller 2)
 
 - **Metodología:** Aplicar estrictamente el framework GSD (Spec -> Plan -> Execute -> Verify).
 - **Lectura de Archivos:** Para archivos de datos o código extensos, utilizar `read_file` con `start_line` y `end_line`. No leer archivos completos.
-- **Eficiencia:** Priorizar brevedad técnica y explicaciones concisas.
-- **Configuración de Red:** Al usar el Configuration Model de `networkx`, eliminar manualmente self-loops y aristas paralelas para asegurar un grafo simple como indica el paper.
+- **Eficiencia:** Priorizar siempre la brevedad técnica y explicaciones concisas. Sugerir el modo de operación más económico (Architect/Code/Ask).
+- **Generación de Redes Sintéticas:** Al usar el Configuration Model de `networkx`, eliminar manualmente self-loops y aristas paralelas para asegurar un grafo simple como indica el paper.
+- **Control de Degradación:** Inmediatamente después de limpiar self-loops y aristas paralelas, el agente DEBE calcular e imprimir la desviación del grado promedio o de la distribución resultante frente a la teórica original, para dejar constancia metodológica en el Notebook.
